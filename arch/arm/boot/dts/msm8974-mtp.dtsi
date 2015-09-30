@@ -15,8 +15,9 @@
 /include/ "dsi-panel-jdi-1080p-cmd.dtsi"
 /include/ "dsi-panel-jdi-1080p-video.dtsi"
 
-
-
+/include/ "dsi-panel-truly-1080p-video.dtsi"
+/include/ "dsi-panel-sharp-1080p-cmd.dtsi"
+/include/ "dsi-panel-truly-1080p-cmd.dtsi"
 /include/ "msm8974-regulator.dtsi" /*ranfei add*/
 / {
 	aliases {
@@ -211,6 +212,17 @@
 				ti,pwm-period = <255>;
 			};
 
+/* OPPO 2014-06-23 ranfei Add begin for digital hall MXM2011 */
+		dhall@0C {
+			compatible = "magna,dhall";
+			reg = <0x0c>;
+			interrupt-parent = <&msmgpio>;
+			interrupts = <64 0x4>;
+			dhall,irq-gpio = <&msmgpio 64 0x2008>;
+			vdd_2v8-supply = <&pm8941_l17>;
+			vcc_i2c_1v8-supply = <&pm8941_lvs2>;						
+		};
+/* OPPO 2014-06-23 ranfei Add end */
 
 
 		
@@ -284,14 +296,74 @@
 			};
 		};
 	};
+	
+/*OPPO ranfei add for fpc1021*/
+	spi@f9968000 {
+		fpc_fpc1020@0 { //Slave driver and CS ID
+			compatible = "fpc,fpc1020"; //Manufacture, and Model
+			reg = <0>; //Same as CS ID
+			spi-max-frequency = <19200000>; //Max Frequency for Device
+			#spi-cs-high; //CS Active High
+			interrupt-parent = <&msmgpio>; //GPIO Handler
+			interrupts = <102 0>; //GPIO # and flags
+			fpc,gpio_irq = <&msmgpio 102 0x00>; //Pass a GPIO
+			fpc,gpio_reset = <&msmgpio 84 0x00>; 
+			fpc,vddtx_mv;
+			#fpc,txout_boost_enable;
+			#spi-cpol; //CPOL bit set for SPI polarity
+			#spi-cpha; //CPHA bit set for SPI Phase
+			vdd_io-supply = <&pm8941_s3>;  // 1.8V 
+			vdd_ana-supply = <&pm8941_l18>; // 3.3V
+		};
+	};
+/*OPPO ranfei add end*/
+	/*OPPO yuyi 2014-06-28 add begin for 14021 NFC spi clk*/
+	/*ifdef  CONFIG_OPPO_MSM_14021*/
+	spi@f9964000 {
+		p61-nxp-nfc@0 { //Slave driver and CS ID
+			compatible = "p61,nxp-nfc-n3"; //Manufacture, and Model
+			reg = <0>; //Same as CS ID
+			spi-max-frequency = <4000000>; //Max Frequency for Device
+			spi-cs-high; //CS Active High
+			interrupt-parent = <&msmgpio>; //GPIO Handler
+			interrupts = <34 0>; //GPIO # and flags
+			p61-nxp-nfc,irq-gpio = <&msmgpio 34 0x00>; //Pass a GPIO
+			#spi-cpol; //CPOL bit set for SPI polarity
+			#spi-cpha; //CPHA bit set for SPI Phase
+		};
+	};
+	/*endif*/
+	/*OPPO yuyi 2014-06-28 add end for 14021 NFC spi clk*/
+	
+	/*OPPO yuyi 2014-03-18 add begin for 14001 NFC spi clk*/
+	/*ifdef  CONFIG_VENDOR_EDIT*/
+	spi@f9965000 {
+		p61-nxp-nfc@0 { //Slave driver and CS ID
+			compatible = "p61,nxp-nfc"; //Manufacture, and Model
+			reg = <0>; //Same as CS ID
+			spi-max-frequency = <4000000>; //Max Frequency for Device
+			spi-cs-high; //CS Active High
+			interrupt-parent = <&msmgpio>; //GPIO Handler
+			interrupts = <34 0>; //GPIO # and flags
+			p61-nxp-nfc,irq-gpio = <&msmgpio 34 0x00>; //Pass a GPIO
+			#spi-cpol; //CPOL bit set for SPI polarity
+			#spi-cpha; //CPHA bit set for SPI Phase
+		};
+	};
+	/*endif*/
+	/*OPPO yuyi 2014-03-18 add end for 14001 NFC spi clk*/
 
 	gpio_keys {
 		compatible = "gpio-keys";
 		input-name = "gpio-keys";
-
+/*OPPO yuyi 2013-09-27 add begin for enable gpio_key*/
+		status = "ok"; 
+/*OPPO yuyi 2013-09-27 add end for enable gpio_key*/
 		camera_snapshot {
 			label = "camera_snapshot";
-			gpios = <&pm8941_gpios 3 0x1>;
+/* OPPO 2014-06-23 sjc Delete begin for 14021 */
+			#gpios = <&pm8941_gpios 3 0x1>;
+/* OPPO 2014-06-23 sjc Delete end */
 			linux,input-type = <1>;
 			linux,code = <0x2fe>;
 			gpio-key,wakeup;
@@ -347,7 +419,7 @@
 			linux,input-type = <5>;
 			linux,code = <0>;
 			gpio-key,wakeup;
-			debounce-interval = <150>;
+			debounce-interval = <15>;
 		};
 /* #endif */
 /* OPPO zhengzk 2013-04-18 add end */
@@ -426,9 +498,9 @@
 	interrupt-map-mask = <0xffffffff>;
 	interrupt-map = <0 &intc 0 125 0
 			1 &intc 0 221 0
-			2 &msmgpio 62 0x3>;
+			2 &msmgpio 69 0x3>; /* Zhilong.Zhang@OnlineRd.Driver, 2013/11/08, Modify for change the micro SD card detect pin to a NULL pin (gpio_69)*/
 	interrupt-names = "hc_irq", "pwr_irq", "status_irq";
-	cd-gpios = <&msmgpio 62 0x1>;
+	cd-gpios = <&msmgpio 69 0x1>; /* Zhilong.Zhang@OnlineRd.Driver, 2013/11/08, Modify for change the micro SD card detect pin to a NULL pin (gpio_69)*/
 
 	vdd-supply = <&pm8941_l21>;
 	vdd-io-supply = <&pm8941_l13>;
@@ -757,8 +829,11 @@
 	gpio@df00 { /* GPIO 32 */
 		qcom,mode = <0>;        /* QPNP_PIN_MODE_DIG_IN */
 		qcom,pull = <4>;	/* QPNP_PIN_PULL_DN */
+		qcom,vin-sel = <2>;
+		qcom,src-sel = <0>; /* QPNP_PIN_SEL_FUNC_CONSTANT */
 		qcom,master-en = <1>;
 	};
+/*OPPO yuyi 2014-05-24 modify end for config NFC clock_requset pin*/
 
 	gpio@e000 { /* GPIO 33 */
 		qcom,mode = <0>;        /* QPNP_PIN_MODE_DIG_IN */
@@ -834,7 +909,7 @@
 		qcom,cdc-micbias4-ext-cap;
 	};
 };
-
+/*
 &spi_epm {
 	epm-adc@0 {
 		compatible = "cy,epm-adc-cy8c5568lti-114";
@@ -852,7 +927,7 @@
 				50>;
 		qcom,channel-type = <0x1540>;
 	};
-};
+};*/
 
 
 

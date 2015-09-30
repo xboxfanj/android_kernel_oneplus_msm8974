@@ -128,7 +128,14 @@
 
 	lpm_levels: qcom,lpm-levels {
 		compatible = "qcom,lpm-levels";
-		qcom,allow-synced-levels;
+		/*#ifdef VENDOR_EDIT */
+		/* Modified by yangrujin@oneplus.cn 2014-12-26 */
+		/* for fix system hang or crash after upgrade from android 4.3 to android 5.0 via recovery*/
+		
+		//qcom,allow-synced-levels;
+		
+		/*#endif*/
+		
 		qcom,default-l2-state = "l2_cache_retention";
 		#address-cells = <1>;
 		#size-cells = <1>;

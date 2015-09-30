@@ -204,8 +204,11 @@
 		status = "disabled";
 
 		/*vendor_edit wangjc change*/
-		qcom,vddmax-mv = <4352>;
-		qcom,vddsafe-mv = <4350>;
+//#ifdef CONFIG_VENDOR_EDIT
+/* yangfangbiao@oneplus.cn, 2015/01/06  Add for  sync with KK charge standard  */
+		qcom,vddmax-mv = <4320>;
+		qcom,vddsafe-mv = <4320>;
+//#endif /*CONFIG_VENDOR_EDIT*/
 		qcom,vinmin-mv = <4400>;
 		qcom,ibatmax-ma = <2000>;
 		qcom,ibatterm-ma = <150>;
@@ -217,6 +220,11 @@
 		qcom,warm-bat-decidegc = <450>;
 		qcom,warm-bat-mv = <4100>;
 		qcom,ibatmax-cool-ma = <900>;
+//#ifdef CONFIG_VENDOR_EDIT
+/* yangfangbiao@oneplus.cn, 2015/01/06  Add for  sync with KK charge standard  */
+		qcom,little-cool-bat-mv = <4320>;
+		qcom,ibatmax-little-cool-ma = <1400>;
+//#endif /*CONFIG_VENDOR_EDIT*/
 		qcom,vbatdet-delta-mv = <100>;
 		qcom,resume-soc = <99>;
 		qcom,tchg-mins = <150>;
@@ -1252,8 +1260,15 @@
 	qcom,vibrator@c000 {
 		compatible = "qcom,qpnp-vibrator";
 		reg = <0xc000 0x100>;
+/* OPPO yuyi 2013-09-27 add begin for vibrator*/
+		qcom,vib-timeout-ms = <15000>;
+		qcom,vib-vtg-level-mV = <3100>;
+/* OPPO yuyi 2013-09-27 add end for vibrator*/
 		label = "vibrator";
-		status = "disabled";
+/* OPPO yuyi 2013-09-27 modify begin for vibrator*/
+	//	status = "disabled";
+		status = "okay";
+/* OPPO yuyi 2013-09-27 modify end for vibrator*/		
 	};
 
 	qcom,leds@d000 {
