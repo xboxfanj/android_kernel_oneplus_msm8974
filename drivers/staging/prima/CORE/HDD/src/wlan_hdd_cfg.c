@@ -2574,13 +2574,6 @@ REG_VARIABLE( CFG_TDLS_SCAN_COEX_SUPPORT_ENABLE, WLAN_PARAM_Integer,
               CFG_TDLS_SCAN_COEX_SUPPORT_ENABLE_DEFAULT,
               CFG_TDLS_SCAN_COEX_SUPPORT_ENABLE_MIN,
               CFG_TDLS_SCAN_COEX_SUPPORT_ENABLE_MAX ),
-
-REG_VARIABLE( CFG_TDLS_SCAN_ENABLE, WLAN_PARAM_Integer,
-              hdd_config_t, fEnableTDLSScan,
-              VAR_FLAGS_OPTIONAL | VAR_FLAGS_RANGE_CHECK_ASSUME_DEFAULT,
-              CFG_TDLS_SCAN_ENABLE_DEFAULT,
-              CFG_TDLS_SCAN_ENABLE_MIN,
-              CFG_TDLS_SCAN_ENABLE_MAX ),
 #endif
 
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
@@ -3224,14 +3217,6 @@ REG_VARIABLE( CFG_EXTSCAN_ENABLE, WLAN_PARAM_Integer,
                   CFG_ENABLE_DYNAMIC_RA_START_RATE_DEFAULT,
                   CFG_ENABLE_DYNAMIC_RA_START_RATE_MIN,
                   CFG_ENABLE_DYNAMIC_RA_START_RATE_MAX),
-
-   REG_VARIABLE( CFG_P2P_LISTEN_DEFER_INTERVAL_NAME, WLAN_PARAM_Integer,
-                  hdd_config_t, gP2PListenDeferInterval,
-                  VAR_FLAGS_OPTIONAL |
-                  VAR_FLAGS_RANGE_CHECK_ASSUME_DEFAULT,
-                  CFG_P2P_LISTEN_DEFER_INTERVAL_DEFAULT,
-                  CFG_P2P_LISTEN_DEFER_INTERVAL_MIN,
-                  CFG_P2P_LISTEN_DEFER_INTERVAL_MAX),
 };
 
 /*
@@ -3641,7 +3626,6 @@ static void print_hdd_cfg(hdd_context_t *pHddCtx)
   VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "Name = [gAcsScanBandPreference] Value = [%u] ",pHddCtx->cfg_ini->acsScanBandPreference);
   VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "Name = [gACSBandSwitchThreshold] value = [%u]\n",pHddCtx->cfg_ini->acsBandSwitchThreshold);
   VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "Name = [gDeferScanTimeInterval] value = [%u]\n",pHddCtx->cfg_ini->nDeferScanTimeInterval);
-  VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "Name = [gEnableTDLSScan] value = [%u]\n",pHddCtx->cfg_ini->fEnableTDLSScan);
 }
 
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013, 2015 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -82,8 +82,6 @@ when           who        what, where, why
 #include "sapFsm_ext.h"
 #include "sapChSelect.h"
 #include "wlan_hdd_dp_utils.h"
-#include "wlan_hdd_main.h"
-
 /*----------------------------------------------------------------------------
  * Preprocessor Definitions and Constants
  * -------------------------------------------------------------------------*/
@@ -164,13 +162,16 @@ typedef struct {
     WLANTL_STAStateType tlSTAState;
 
    /** Transmit queues for each AC (VO,VI,BE etc). */
-   hdd_list_t wmm_tx_queue[NUM_TX_QUEUES];
+   //hdd_list_t wmm_tx_queue[NUM_TX_QUEUES];
+   hdd_list_t wmm_tx_queue[4];
 
    /** Might need to differentiate queue depth in contention case */
-   v_U16_t aTxQueueDepth[NUM_TX_QUEUES];
+   //v_U16_t aTxQueueDepth[NUM_TX_QUEUES];
+   v_U16_t aTxQueueDepth[4];
 
    /**Track whether OS TX queue has been disabled.*/
-   v_BOOL_t txSuspended[NUM_TX_QUEUES];
+   //v_BOOL_t txSuspended[NUM_TX_QUEUES];
+   v_BOOL_t txSuspended[4];
 
    /**Track whether 3/4th of resources are used */
    v_BOOL_t vosLowResource;
