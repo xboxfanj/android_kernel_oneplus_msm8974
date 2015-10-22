@@ -19,6 +19,7 @@
 #include <linux/clkdev.h>
 #include <linux/io.h>
 #include <linux/ktime.h>
+#include <linux/sched.h>
 #include <linux/smp.h>
 #include <linux/tick.h>
 #include <linux/delay.h>
